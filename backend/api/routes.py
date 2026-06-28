@@ -1,5 +1,8 @@
 from fastapi import APIRouter
 
+from backend.models.request_models import AnalyzeRequest
+from backend.models.response_models import AnalyzeResponse
+
 from backend.services.analysis_service import (
     analyze_query
 )
@@ -15,10 +18,15 @@ def home():
     }
 
 
-@router.post("/analyze")
-def analyze(sql_query: str):
+@router.post(
+    "/analyze",
+    response_model=AnalyzeResponse
+)
+def analyze(request: AnalyzeRequest):
 
-    result = analyze_query(sql_query)
+    result = analyze_query(
+        request.sql_query
+    )
 
     return {
         "data": result["data"].to_dict(
