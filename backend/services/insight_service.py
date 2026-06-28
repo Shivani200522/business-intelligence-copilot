@@ -1,45 +1,19 @@
 def generate_insights(df):
 
+    if df is None or len(df) == 0:
+        return ["No data available"]
+
     insights = []
 
-    columns = list(df.columns)
+    # try simple numeric column detection
+    numeric_cols = df.select_dtypes(include=["number"]).columns
 
-    if len(columns) != 2:
-        return [
-            "Unable to generate insights for this result structure."
-        ]
+    if len(numeric_cols) > 0:
+        col = numeric_cols[0]
+        insights.append(f"Average {col}: {df[col].mean():.2f}")
+        insights.append(f"Max {col}: {df[col].max()}")
+        insights.append(f"Min {col}: {df[col].min()}")
 
-    category_col = columns[0]
-    metric_col = columns[1]
-
-    total = df[metric_col].sum()
-
-    top = df.iloc[0]
-    bottom = df.iloc[-1]
-
-    top_share = (
-        top[metric_col] / total
-    ) * 100
-
-    difference = (
-        (top[metric_col] - bottom[metric_col])
-        / top[metric_col]
-    ) * 100
-
-    insights.append(
-        f"{top[category_col]} has the highest {metric_col}."
-    )
-
-    insights.append(
-        f"{top[category_col]} contributes {top_share:.1f}% of total {metric_col}."
-    )
-
-    insights.append(
-        f"{bottom[category_col]} is the lowest performer."
-    )
-
-    insights.append(
-        f"The gap between top and bottom performers is {difference:.1f}%."
-    )
+    insights.append(f"Total rows: {len(df)}")
 
     return insights
