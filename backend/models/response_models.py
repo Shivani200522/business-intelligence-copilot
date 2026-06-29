@@ -1,9 +1,12 @@
 from pydantic import BaseModel
 
+from typing import Any
+from pydantic import BaseModel
 
 class AnalyzeResponse(BaseModel):
-    data: list
+    data: list[Any]
     insights: list[str]
+
 
 class UploadResponse(BaseModel):
     dataset_id: int

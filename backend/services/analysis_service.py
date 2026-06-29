@@ -1,6 +1,7 @@
 from backend.ai.ai_service import AIService
 from backend.services.query_service import execute_query
 from backend.services.insight_service import generate_insights
+from backend.services.summary_service import SummaryService
 
 
 def analyze_question(question: str, table_name: str, schema: list):
